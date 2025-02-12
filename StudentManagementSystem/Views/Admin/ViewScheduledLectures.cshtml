@@ -1,0 +1,26 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Scheduled Lectures";
+}
+
+<h3>Scheduled Lectures for @ViewBag.Class.ClassName</h3>
+
+<table class="table table-bordered mt-3">
+    <thead class="table-primary">
+        <tr>
+            <th>Lecture Date</th>
+            <th>Time</th>
+            <th>Topic</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lecture in Model)
+        {
+            <tr>
+                <td>@lecture.LectureDateTime.ToString("yyyy-MM-dd")</td>
+                <td>@lecture.LectureDateTime.ToString("hh:mm tt")</td>
+                <td>@lecture.Topic</td>
+            </tr>
+        }
+    </tbody>
+</table>

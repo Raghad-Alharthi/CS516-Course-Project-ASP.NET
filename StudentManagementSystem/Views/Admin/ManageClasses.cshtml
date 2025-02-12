@@ -1,0 +1,69 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Classes";
+}
+
+<h3>Manage Classes</h3>
+
+<table class="table table-bordered mt-3">
+    <thead class="table-primary">
+        <tr>
+            <th>Class Name</th>
+            <th>Teacher</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var classItem in Model)
+        {
+            <tr>
+                <td>@classItem.ClassName</td>
+                <td>@(classItem.Teacher?.FirstName ?? "Unassigned")</td>
+                <td>
+                    <form asp-action="DeleteClass" method="post">
+                        <input type="hidden" name="ClassID" value="@classItem.ClassID">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Add New Class & Schedule Lectures</h4>
+<form asp-action="AddClassWithSchedule" method="post">
+    <div class="mb-3">
+        <label class="form-label">Class Name</label>
+        <input type="text" name="className" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Assign Teacher</label>
+        <select name="TeacherID" class="form-control" required>
+            @foreach (var teacher in ViewBag.Teachers)
+            {
+                <option value="@teacher.UserID">@teacher.FirstName @teacher.LastName</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Select Lecture Day</label>
+        <select name="selectedDay" class="form-control" required>
+            <option value="Sunday">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Select Lecture Time</label>
+        <input type="time" name="selectedTime" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Class & Generate Lectures</button>
+</form>

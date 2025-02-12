@@ -1,0 +1,39 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Class";
+}
+
+<h3>Manage Class: @ViewBag.Class.ClassName</h3>
+
+@if (Model.Count == 0)
+{
+    <p>No past or current lectures available.</p>
+}
+else
+{
+    <table class="table table-bordered mt-3">
+        <thead class="table-primary">
+            <tr>
+                <th>Lecture Date</th>
+                <th>Time</th>
+                <th>Actions</th>
+                <th>Excuses</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lecture in Model)
+            {
+                <tr>
+                    <td>@lecture.LectureDateTime.ToString("yyyy-MM-dd")</td>
+                    <td>@lecture.LectureDateTime.ToString("hh:mm tt")</td>
+                    <td>
+                        <a href="/Teacher/EditAttendance?lectureId=@lecture.LectureID" class="btn btn-success btn-sm">Edit Attendance</a>
+                    </td>
+                    <td>
+                        <a href="/Teacher/SickLeaveRequests" class="btn btn-success btn-sm">View Excuses</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

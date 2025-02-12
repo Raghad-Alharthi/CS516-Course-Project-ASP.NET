@@ -1,0 +1,23 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Sick Leave Status";
+}
+
+<h3>Sick Leave Status for Lecture on @ViewBag.Attendance.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")</h3>
+
+<p>Status: <strong>@ViewBag.Attendance.SickLeaveStatus</strong></p>
+
+@if (!string.IsNullOrEmpty(ViewBag.Attendance.SickLeaveFile))
+{
+    <p>Uploaded File: <a href="@ViewBag.Attendance.SickLeaveFile" target="_blank">View File</a></p>
+}
+
+@if (ViewBag.Attendance.SickLeaveStatus == "Rejected")
+{
+    <form method="post" asp-action="SubmitSickLeave" enctype="multipart/form-data">
+        <input type="hidden" name="attendanceId" value="@ViewBag.Attendance.AttendanceID">
+        <label for="sickLeaveFile">Re-upload Sick Leave Document:</label>
+        <input type="file" name="sickLeaveFile" required class="form-control">
+        <button type="submit" class="btn btn-warning mt-2">Resubmit</button>
+    </form>
+}

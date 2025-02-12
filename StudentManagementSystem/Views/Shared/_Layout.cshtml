@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Student Management System</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Student Management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    @if (User.Identity.IsAuthenticated) 
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <!-- Show only for Admin -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Admin/Dashboard">Admin Panel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Admin/ManageTeachers">Manage Teachers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Admin/ManageStudents">Manage Students</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Admin/ManageClasses">Manage Classes</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Teacher"))
+                        {
+                            <!-- Show only for Teachers -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Teacher/Dashboard">Teacher Dashboard</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Student"))
+                        {
+                            <!-- Show only for Students -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Student/Dashboard">Student Dashboard</a>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="/Account/Login">Logout</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Teacher Dashboard";
+}
+
+<h3>Welcome, @User.FindFirst("FirstName")?.Value @User.FindFirst("LastName")?.Value!</h3>
+
+<p>Here are your assigned classes:</p>
+
+@if (ViewBag.TeacherClasses != null && ViewBag.TeacherClasses.Count > 0)
+{
+    <div class="list-group mt-3">
+        @foreach (var classItem in ViewBag.TeacherClasses)
+        {
+            <a href="/Teacher/ManageClass?ClassID=@classItem.ClassID" class="list-group-item list-group-item-action">
+                @classItem.ClassName
+                <button class="btn btn-sm btn-primary float-end">Manage Class</button>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <p class="text-danger">You are not assigned to any classes yet.</p>
+}

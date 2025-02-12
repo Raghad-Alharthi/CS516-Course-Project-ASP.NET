@@ -1,0 +1,34 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h3>Admin Dashboard</h3>
+<p>Welcome to the Admin Panel. Use the navigation buttons below to manage the system.</p>
+
+
+<h4><a href="/Admin/ManageClasses">Classes </a> </h4>
+<ul class="list-group">
+    @foreach (var classItem in ViewBag.Classes)
+    {
+        <li class="list-group-item">
+            @classItem.ClassName - Taught by: @(classItem.Teacher?.FirstName ?? "Unassigned")
+        </li>
+    }
+</ul>
+
+<h4><a href="/Admin/ManageTeachers">Teachers </a> </h4>
+<ul class="list-group">
+    @foreach (var teacher in ViewBag.Teachers)
+    {
+        <li class="list-group-item">@teacher.FirstName @teacher.LastName</li>
+    }
+</ul>
+
+<h4><a href="/Admin/ManageStudents">Students </a> </h4>
+<ul class="list-group">
+    @foreach (var student in ViewBag.Students)
+    {
+        <li class="list-group-item">@student.FirstName @student.LastName</li>
+    }
+</ul>

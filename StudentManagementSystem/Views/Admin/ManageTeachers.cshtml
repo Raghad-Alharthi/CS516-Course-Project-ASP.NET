@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Manage Teachers";
+}
+
+<h3>Manage Teachers</h3>
+
+<table class="table table-bordered mt-3">
+    <thead class="table-primary">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var teacher in Model)
+        {
+            <tr>
+                <td>@teacher.FirstName</td>
+                <td>@teacher.LastName</td>
+                <td>@teacher.Username</td>
+                <td>
+                    <form asp-action="DeleteTeacher" method="post">
+                        <input type="hidden" name="TeacherID" value="@teacher.UserID">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Add New Teacher</h4>
+<form asp-action="AddTeacher" method="post">
+    <div class="mb-3">
+        <label class="form-label">First Name</label>
+        <input type="text" name="firstName" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Last Name</label>
+        <input type="text" name="lastName" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Teacher</button>
+</form>

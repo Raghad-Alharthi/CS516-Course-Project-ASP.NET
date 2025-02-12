@@ -1,0 +1,17 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Submit Sick Leave";
+}
+
+<h3>Submit Sick Leave for Lecture on @ViewBag.Attendance.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")</h3>
+
+<form method="post" asp-action="SubmitSickLeave" enctype="multipart/form-data">
+    <input type="hidden" name="attendanceId" value="@ViewBag.Attendance.AttendanceID">
+
+    <div class="form-group">
+        <label for="sickLeaveFile">Upload Sick Leave Document:</label>
+        <input type="file" name="sickLeaveFile" required class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>

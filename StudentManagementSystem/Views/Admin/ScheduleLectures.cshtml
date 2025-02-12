@@ -1,0 +1,38 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Schedule Lectures";
+}
+
+<h3>Schedule Lectures for the Semester</h3>
+
+<form asp-action="GenerateSemesterSchedule" method="post">
+    <div class="mb-3">
+        <label class="form-label">Select Class</label>
+        <select name="ClassID" class="form-control" required>
+            @foreach (var classItem in ViewBag.Classes)
+            {
+                <option value="@classItem.ClassID">@classItem.ClassName</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Select Day of the Week</label>
+        <select name="selectedDay" class="form-control" required>
+            <option value="Sunday">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Select Time</label>
+        <input type="time" name="selectedTime" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Generate Semester Schedule</button>
+</form>

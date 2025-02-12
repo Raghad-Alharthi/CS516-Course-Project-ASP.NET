@@ -1,0 +1,53 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<h3>Welcome, @User.FindFirst("FirstName")?.Value @User.FindFirst("LastName")?.Value!</h3>
+
+@if (ViewBag.AbsenceData.Count > 0)
+{
+    <h4>Your Absence Summary</h4>
+
+    <table class="table table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>Class</th>
+                <th>Absence Percentage</th>
+                <th>Missed Lectures</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var classData in ViewBag.AbsenceData)
+            {
+                <tr>
+                    <td>@classData.ClassName</td>
+                    <td><strong>@classData.AbsencePercentage.ToString("0.00")%</strong></td>
+                    <td>
+                        @if (classData.Absences.Count > 0)
+                        {
+                            <ul>
+                                @foreach (var absence in classData.Absences)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("AbsenceDetails", "Student", new { attendanceId = absence.AttendanceID })">
+                                            @absence.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-success">No absences</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-danger">You are not enrolled in any classes.</p>
+}
