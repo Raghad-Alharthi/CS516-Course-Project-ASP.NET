@@ -3,15 +3,28 @@
     ViewData["Title"] = "Submit Sick Leave";
 }
 
-<h3>Submit Sick Leave for Lecture on @ViewBag.Attendance.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")</h3>
+<div class="container my-5">
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; background-color: #F1EFEC; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);">
+        <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">
+            Submit Sick Leave for Lecture on @ViewBag.Attendance.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")
+        </h3>
 
-<form method="post" asp-action="SubmitSickLeave" enctype="multipart/form-data">
-    <input type="hidden" name="attendanceId" value="@ViewBag.Attendance.AttendanceID">
+        <form method="post" asp-action="SubmitSickLeave" enctype="multipart/form-data" class="mt-4">
+            <input type="hidden" name="attendanceId" value="@ViewBag.Attendance.AttendanceID" />
 
-    <div class="form-group">
-        <label for="sickLeaveFile">Upload Sick Leave Document:</label>
-        <input type="file" name="sickLeaveFile" required class="form-control">
+            <div class="mb-3">
+                <label for="sickLeaveFile" class="form-label" style="font-family: Funnel Display; color: #123458;">
+                    Upload Sick Leave Document:
+                </label>
+                <input type="file" name="sickLeaveFile" required class="form-control"
+                       style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" />
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary"
+                    style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">
+                Submit
+            </button>
+        </form>
     </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
-</form>
+</div>

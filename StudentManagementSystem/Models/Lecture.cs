@@ -12,7 +12,7 @@ namespace StudentManagementSystem.Models
         [ForeignKey("Class")]
         public int ClassID { get; set; }
         public Class Class { get; set; } // 🔹 Navigation Property
-
+        public virtual ICollection<Attendance> Attendances { get; set; }
         [Required]
         public DateTime LectureDateTime { get; set; }
     }

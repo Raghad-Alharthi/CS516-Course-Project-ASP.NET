@@ -3,51 +3,60 @@
     ViewData["Title"] = "Student Dashboard";
 }
 
-<h3>Welcome, @User.FindFirst("FirstName")?.Value @User.FindFirst("LastName")?.Value!</h3>
+<div class="container my-5">
+    <!-- Greeting the User -->
+    <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">
+        Welcome, @User.FindFirst("FirstName")?.Value @User.FindFirst("LastName")?.Value!
+    </h3>
 
-@if (ViewBag.AbsenceData.Count > 0)
-{
-    <h4>Your Absence Summary</h4>
+    @if (ViewBag.AbsenceData.Count > 0)
+    {
+        <!-- Absence Summary Section -->
+        <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+            <h4 style="font-family: Funnel Display; color: #123458;">Your Absence Summary</h4>
 
-    <table class="table table-bordered">
-        <thead class="table-primary">
-            <tr>
-                <th>Class</th>
-                <th>Absence Percentage</th>
-                <th>Missed Lectures</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var classData in ViewBag.AbsenceData)
-            {
-                <tr>
-                    <td>@classData.ClassName</td>
-                    <td><strong>@classData.AbsencePercentage.ToString("0.00")%</strong></td>
-                    <td>
-                        @if (classData.Absences.Count > 0)
-                        {
-                            <ul>
-                                @foreach (var absence in classData.Absences)
+            <table class="table table-bordered mt-3" style="background-color: #f8f7f6;">
+                <thead style="background-color: #123458; color: #f8f7f6;">
+                    <tr>
+                        <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Class</th>
+                        <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Absence Percentage</th>
+                        <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Missed Lectures</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var classData in ViewBag.AbsenceData)
+                    {
+                        <tr>
+                            <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">@classData.ClassName</td>
+                            <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;"><strong>@classData.AbsencePercentage.ToString("0.00")%</strong></td>
+                            <td style="background-color: #f8f7f6;">
+                                @if (classData.Absences.Count > 0)
                                 {
-                                    <li>
-                                        <a href="@Url.Action("AbsenceDetails", "Student", new { attendanceId = absence.AttendanceID })">
-                                            @absence.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")
-                                        </a>
-                                    </li>
+                                    <ul style="list-style: circle;">
+                                        @foreach (var absence in classData.Absences)
+                                        {
+                                            <li style="justify-items: left;">
+                                                <a href="@Url.Action("AbsenceDetails", "Student", new { attendanceId = absence.AttendanceID })"
+                                                   style="font-family: Funnel Display; color: #123458; text-decoration: none;">
+                                                    @absence.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
                                 }
-                            </ul>
-                        }
-                        else
-                        {
-                            <span class="text-success">No absences</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p class="text-danger">You are not enrolled in any classes.</p>
-}
+                                else
+                                {
+                                    <span class="text-success" style="font-family: Funnel Display;">No absences</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-danger" style="font-family: Funnel Display;">You are not enrolled in any classes.</p>
+    }
+</div>

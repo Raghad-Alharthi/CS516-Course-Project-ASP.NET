@@ -1,34 +1,104 @@
+@model List<StudentManagementSystem.Models.ViewModels.StudentViewModel>
+@using System.Linq
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Manage Students";
 }
 
-<h3>Manage Students</h3>
+<div class="container my-5">
+    <!-- Page Title -->
+    <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">Manage Students and Class Assignments</h3>
 
-<table class="table table-bordered mt-3">
-    <thead class="table-primary">
-        <tr>
-            <th>Student Name</th>
-            <th>Assign to Class</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var student in Model)
-        {
-            <tr>
-                <td>@student.FirstName @student.LastName</td>
-                <td>
-                    <form asp-action="AssignStudentToClass" method="post">
-                        <input type="hidden" name="StudentID" value="@student.UserID">
-                        <select name="ClassID" class="form-control">
-                            @foreach (var classItem in ViewBag.Classes)
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="font-family: Funnel Display;">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Students Table -->
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <table class="table table-bordered mt-3" style="background-color: white;">
+            <thead style="background-color: #123458; color: white;">
+                <tr>
+                    <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Student Name</th>
+                    <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Assigned Classes</th>
+                    <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Assign New Class</th>
+                    <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model)
+                {
+                    <tr>
+                        <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">
+                            @student.FirstName @student.LastName
+                        </td>
+                        <td style="background-color: #f8f7f6;">
+                            @if (student.AssignedClasses.Any())
                             {
-                                <option value="@classItem.ClassID">@classItem.ClassName</option>
+                                <ul>
+                                    @foreach (var assignedClass in student.AssignedClasses)
+                                    {
+                                        <li style="font-family: Funnel Display; color: #123458;">@assignedClass.ClassName</li>
+                                    }
+                                </ul>
                             }
-                        </select>
-                        <button type="submit" class="btn btn-success btn-sm mt-2">Assign</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                            else
+                            {
+                                <span class="text-danger" style="font-family: Funnel Display;">No classes assigned</span>
+                            }
+                        </td>
+                        <td style="background-color: #f8f7f6; align-items: center;">
+                            <form asp-action="AssignStudentToClass" method="post">
+                                <input type="hidden" name="StudentID" value="@student.UserID">
+                                <div class="d-flex align-items-center">
+                                    <select name="ClassID" class="form-select me-2" style="font-family: Funnel Display;">
+                                        <option disabled selected value="">-- Select a Class --</option>
+                                        @foreach (var classItem in ViewBag.Classes)
+                                        {
+                                            <option value="@classItem.ClassID">@classItem.ClassName</option>
+                                        }
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Assign</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-action="DeleteStudent" method="post" style="display: inline;">
+                                <input type="hidden" name="id" value="@student.UserID">
+                                <button type="button" style="font-family: Funnel Display;" class="btn btn-danger btn-sm" onclick="confirmDeletion(this);">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Add New Student Section -->
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <h4 style="font-family: Funnel Display; color: #123458;">Add New Student</h4>
+        
+        <form asp-action="AddStudent" method="post">
+            <div class="mb-3">
+                <label class="form-label" style="font-family: Funnel Display; color: #123458;">First Name</label>
+                <input style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" type="text" name="firstName" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-family: Funnel Display; color: #123458;">Last Name</label>
+                <input style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" type="text" name="lastName" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-family: Funnel Display; color: #123458;">Username</label>
+                <input style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-family: Funnel Display; color: #123458;">Password</label>
+                <input style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Add Student</button>
+        </form>
+    </div>
+</div>

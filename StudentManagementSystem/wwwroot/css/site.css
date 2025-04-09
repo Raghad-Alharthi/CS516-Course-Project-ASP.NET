@@ -2,7 +2,7 @@ html {
   font-size: 14px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 100%) {
   html {
     font-size: 16px;
   }
@@ -19,4 +19,84 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #123458;
+  border-color: #123458;
+  font-family: 'Funnel Display', sans-serif;
+  border-radius: 6px;
+}
+
+.btn-primary:hover {
+  background-color: #0F2A4D;
+}
+
+/* Links */
+a {
+  color: #123458;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Table Styling */
+table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #123458;
+  color: white;
+}
+
+tbody tr td {
+  color: #123458;
+  font-family: 'Funnel Display', sans-serif;
+}
+
+.table-bordered th {
+  background-color: #123458;
+  color: white;
+  font-family: 'Funnel Display', sans-serif;
+}
+
+.table-bordered td {
+  color: #123458;
+  font-family: 'Funnel Display', sans-serif;
+}
+
+/* Table Row Hover Effect */
+.table-bordered tbody tr:hover {
+  background-color: #f8f7f6;
+}
+
+/* List Group Item Styling */
+.list-group-item {
+  background-color: #f8f7f6;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* Form Labels */
+.form-label {
+  font-family: 'Funnel Display', sans-serif;
+  color: #123458;
+}
+
+/* Form Inputs */
+.form-control {
+  font-family: 'Funnel Display', sans-serif;
+  color: #123458;
 }

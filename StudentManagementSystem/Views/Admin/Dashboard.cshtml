@@ -3,32 +3,62 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h3>Admin Dashboard</h3>
-<p>Welcome to the Admin Panel. Use the navigation buttons below to manage the system.</p>
+<div class="container my-5">
+    <!-- Page Title -->
+    <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">Admin Dashboard</h3>
+    <p style="font-family: Funnel Display; color: #123458;">
+        Welcome to the Admin Panel. Use the navigation buttons below to manage the system.
+    </p>
+
+    <!-- Classes Section -->
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">
+                <a style="font-family: Funnel Display; color: #123458; text-decoration: none;">Classes</a>
+            </h4>
+            <a href="/Admin/ManageClasses" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Manage</a>
+        </div>
+        
+        <ul class="list-group">
+            @foreach (var classItem in ViewBag.Classes)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #f8f7f6;">
+                    <span style="font-family: Funnel Display; color: #123458;">@classItem.ClassName - Taught by @(classItem.Teacher?.FirstName ?? "Unassigned")</span>
+                </li>
+            }
+        </ul>
+    </div>
 
 
-<h4><a href="/Admin/ManageClasses">Classes </a> </h4>
-<ul class="list-group">
-    @foreach (var classItem in ViewBag.Classes)
-    {
-        <li class="list-group-item">
-            @classItem.ClassName - Taught by: @(classItem.Teacher?.FirstName ?? "Unassigned")
-        </li>
-    }
-</ul>
+    <!-- Teachers Section -->
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4><a style="font-family: Funnel Display; color: #123458; text-decoration: none;">Teachers</a></h4>
+            <a href="/Admin/ManageTeachers" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Manage</a>
+        </div>
+        <ul class="list-group">
+            @foreach (var teacher in ViewBag.Teachers)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #f8f7f6;">
+                    <span style="font-family: Funnel Display; color: #123458;">@teacher.FirstName @teacher.LastName</span>
+                </li>
+            }
+        </ul>
+    </div>
 
-<h4><a href="/Admin/ManageTeachers">Teachers </a> </h4>
-<ul class="list-group">
-    @foreach (var teacher in ViewBag.Teachers)
-    {
-        <li class="list-group-item">@teacher.FirstName @teacher.LastName</li>
-    }
-</ul>
-
-<h4><a href="/Admin/ManageStudents">Students </a> </h4>
-<ul class="list-group">
-    @foreach (var student in ViewBag.Students)
-    {
-        <li class="list-group-item">@student.FirstName @student.LastName</li>
-    }
-</ul>
+    <!-- Students Section -->
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4><a style="font-family: Funnel Display; color: #123458; text-decoration: none;">Students</a></h4>
+            <a href="/Admin/ManageStudents" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Manage</a>
+        </div>
+        <ul class="list-group">
+            @foreach (var student in ViewBag.Students)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #f8f7f6;">
+                    <span style="font-family: Funnel Display; color: #123458;">@student.FirstName @student.LastName</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

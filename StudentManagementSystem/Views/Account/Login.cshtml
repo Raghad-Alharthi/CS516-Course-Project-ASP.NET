@@ -3,9 +3,9 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+<div class="container d-flex justify-content-center align-items-center" style="height: 60%; padding-top: 3%;">
     <div class="card shadow p-4" style="width: 400px;">
-        <h3 class="text-center text-primary">Login</h3>
+        <h3 style="color: #123458; text-align: center; font-family:Funnel Display; font-weight: 700; padding-bottom: 7%; ">Login</h3>
 
         @if (ViewBag.ErrorMessage != null)
         {
@@ -14,17 +14,17 @@
 
         <form method="post" action="/Account/Login">
             <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+                <label style="font-family: Funnel Display;font-weight: 400; font-size: large; padding-bottom: 2%; color: #123458;">Username</label>
+                <input type="text" name="username" class="form-control" style="font-family: Funnel Display;font-weight: 200;" placeholder="Enter your username" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                <label style="font-family: Funnel Display;font-weight: 400; font-size: large; padding-bottom: 2%; color: #123458;">Password</label>
+                <input type="password" name="password" class="form-control" style="font-family: Funnel Display;font-weight: 200;" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100" style="background-color: #123458; border-color: #123458; font-family: Funnel Display; color: #F1EFEC; margin-top: 5%;">Login</button>
         </form>
 
-        <p class="text-center mt-3">
+        <p class="text-center mt-3" style="font-family: Funnel Display;font-weight: 400; color: #123458;">
             Don't have an account? <a href="/Account/Register">Sign up</a>
         </p>
     </div>

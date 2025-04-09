@@ -86,19 +86,26 @@ public class StudentController : Controller
 
         if (sickLeaveFile != null)
         {
-            string filePath = Path.Combine("wwwroot/sick_leaves", sickLeaveFile.FileName);
+            // Save file
+            string fileName = Path.GetFileName(sickLeaveFile.FileName);
+            string filePath = Path.Combine("wwwroot/sick_leaves", fileName);
+
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await sickLeaveFile.CopyToAsync(stream);
             }
 
-            attendance.SickLeaveFile = "/sick_leaves/" + sickLeaveFile.FileName;
+            // Update status and file reference
+            attendance.SickLeaveFile = "/sick_leaves/" + fileName;
             attendance.SickLeaveStatus = "Pending";
+
+            _context.Update(attendance); 
             await _context.SaveChangesAsync();
         }
 
         return RedirectToAction("Dashboard");
     }
+
 
     // Sick Leave Form View
     public async Task<IActionResult> SubmitSickLeaveForm(int attendanceId)

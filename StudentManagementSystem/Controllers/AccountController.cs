@@ -42,7 +42,13 @@ public class AccountController : Controller
         new Claim("LastName", user.LastName), // Store last name
         new Claim(ClaimTypes.Role, user.Role) // Store user role
         };
-
+        
+        Console.WriteLine("Assigned Claims:");
+        foreach (var claim in claims)
+        {
+            Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+        }
+        
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties();
 

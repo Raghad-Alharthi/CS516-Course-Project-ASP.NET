@@ -3,41 +3,79 @@
     ViewData["Title"] = "Sick Leave Requests";
 }
 
-<h3>Sick Leave Requests</h3>
+<div class="container my-5">
+    <div class="card" style="border-radius: 12px; padding: 25px; background-color: #F1EFEC; box-shadow: 0 0 15px rgba(0,0,0,0.05);">
+        <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">
+            Sick Leave Requests
+        </h3>
 
-<table class="table table-bordered">
-    <thead class="table-primary">
-        <tr>
-            <th>Student</th>
-            <th>Lecture Date</th>
-            <th>File</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var request in Model)
-        {
-            <tr>
-                <td>@request.Student.FirstName @request.Student.LastName</td>
-                <td>@request.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(request.SickLeaveFile))
-                    {
-                        <a href="@request.SickLeaveFile" target="_blank" class="btn btn-info">View File</a>
-                    }
-                    else
-                    {
-                        <span class="text-danger">No file submitted</span>
-                    }
-                </td>
-                <td>
-                    <form asp-action="ApproveSickLeave" method="post">
-                        <input type="hidden" name="attendanceId" value="@request.AttendanceID">
-                        <button name="decision" value="Accepted" class="btn btn-success">Accept</button>
-                        <button name="decision" value="Rejected" class="btn btn-danger">Reject</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <table class="table table-bordered mt-4" style="background-color: #f8f7f6;">
+            <thead style="background-color: #123458; color: #f8f7f6;">
+                <tr>
+                    <th style="font-family: Funnel Display;">Student</th>
+                    <th style="font-family: Funnel Display;">Lecture Date</th>
+                    <th style="font-family: Funnel Display;">File</th>
+                    <th style="font-family: Funnel Display;">Status</th>
+                    <th style="font-family: Funnel Display;">Action</th>
+                </tr>
+            </thead>
+            <tbody style="font-family: Funnel Display; color: #123458;">
+                @foreach (var request in Model)
+                {
+                    <tr>
+                        <td>@request.Student.FirstName @request.Student.LastName</td>
+                        <td>@request.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(request.SickLeaveFile))
+                            {
+                                <a href="@request.SickLeaveFile" target="_blank"
+                                   class="btn btn-info btn-sm"
+                                   style="font-family: Funnel Display;">
+                                    View File
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-danger" style="font-family: Funnel Display;">No file submitted</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge 
+                                @(request.SickLeaveStatus == "Accepted" ? "bg-success" :
+                                  request.SickLeaveStatus == "Rejected" ? "bg-danger" :
+                                  "bg-warning text-dark")"
+                                  style="font-family: Funnel Display;">
+                                @request.SickLeaveStatus
+                            </span>
+                        </td>
+                        <td>
+                            @if (request.SickLeaveStatus == "Pending")
+                            {
+                                <form asp-action="ApproveSickLeave" method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="attendanceId" value="@request.AttendanceID" />
+                                    <textarea name="comment" class="form-control mb-2" placeholder="Rejection comment (optional)" style="font-family: Funnel Display;" rows="2"></textarea>
+                                    <div class="d-flex gap-2">
+                                        <button name="decision" value="Accepted"
+                                                class="btn btn-success btn-sm"
+                                                style="font-family: Funnel Display;">
+                                            Accept
+                                        </button>
+                                        <button name="decision" value="Rejected"
+                                                class="btn btn-danger btn-sm"
+                                                style="font-family: Funnel Display;">
+                                            Reject
+                                        </button>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <span style="font-family: Funnel Display;">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

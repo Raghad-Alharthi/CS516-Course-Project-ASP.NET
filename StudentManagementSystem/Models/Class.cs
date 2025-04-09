@@ -13,7 +13,7 @@ namespace StudentManagementSystem.Models
         public string ClassName { get; set; }
 
         [ForeignKey("Teacher")]
-        public int TeacherID { get; set; }
+        public int? TeacherID { get; set; }
         public User Teacher { get; set; }
 
         public ICollection<Lecture> Lectures { get; set; } = new List<Lecture>();

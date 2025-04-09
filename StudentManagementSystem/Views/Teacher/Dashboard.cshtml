@@ -3,23 +3,30 @@
     ViewData["Title"] = "Teacher Dashboard";
 }
 
-<h3>Welcome, @User.FindFirst("FirstName")?.Value @User.FindFirst("LastName")?.Value!</h3>
+<div class="container my-5">
+    <!-- Greeting the User -->
+    <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">
+        Welcome, @User.FindFirst("FirstName")?.Value @User.FindFirst("LastName")?.Value!
+    </h3>
 
-<p>Here are your assigned classes:</p>
+    <p style="font-family: Funnel Display; color: #123458;">Here are your assigned classes:</p>
 
-@if (ViewBag.TeacherClasses != null && ViewBag.TeacherClasses.Count > 0)
-{
-    <div class="list-group mt-3">
-        @foreach (var classItem in ViewBag.TeacherClasses)
-        {
-            <a href="/Teacher/ManageClass?ClassID=@classItem.ClassID" class="list-group-item list-group-item-action">
-                @classItem.ClassName
-                <button class="btn btn-sm btn-primary float-end">Manage Class</button>
-            </a>
-        }
-    </div>
-}
-else
-{
-    <p class="text-danger">You are not assigned to any classes yet.</p>
-}
+    @if (ViewBag.TeacherClasses != null && ViewBag.TeacherClasses.Count > 0)
+    {
+        <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+            <div class="list-group mt-3">
+                @foreach (var classItem in ViewBag.TeacherClasses)
+                {
+                    <div class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #f8f7f6; border-radius: 8px; margin-bottom: 8px;">
+                        <span style="font-family: Funnel Display; color: #123458;">@classItem.ClassName</span>
+                        <a href="/Teacher/ManageClass?ClassID=@classItem.ClassID" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Manage Class</a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="text-danger" style="font-family: Funnel Display;">You are not assigned to any classes yet.</p>
+    }
+</div>

@@ -3,24 +3,30 @@
     ViewData["Title"] = "Scheduled Lectures";
 }
 
-<h3>Scheduled Lectures for @ViewBag.Class.ClassName</h3>
+<div class="container my-5">
+    <!-- Page Title -->
+    <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">Scheduled Lectures for @ViewBag.Class.ClassName</h3>
 
-<table class="table table-bordered mt-3">
-    <thead class="table-primary">
-        <tr>
-            <th>Lecture Date</th>
-            <th>Time</th>
-            <th>Topic</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var lecture in Model)
-        {
-            <tr>
-                <td>@lecture.LectureDateTime.ToString("yyyy-MM-dd")</td>
-                <td>@lecture.LectureDateTime.ToString("hh:mm tt")</td>
-                <td>@lecture.Topic</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Lectures Table -->
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <table class="table table-bordered mt-3" style="background-color: white;">
+            <thead style="background-color: #123458; color: white;">
+                <tr>
+                    <th>Lecture Date</th>
+                    <th>Time</th>
+                    <th>Topic</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lecture in Model)
+                {
+                    <tr>
+                        <td style="font-family: Funnel Display; color: #123458;">@lecture.LectureDateTime.ToString("yyyy-MM-dd")</td>
+                        <td style="font-family: Funnel Display; color: #123458;">@lecture.LectureDateTime.ToString("hh:mm tt")</td>
+                        <td style="font-family: Funnel Display; color: #123458;">@lecture.Topic</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

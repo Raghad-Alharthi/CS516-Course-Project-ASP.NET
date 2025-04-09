@@ -5,30 +5,43 @@
     ViewData["Title"] = "Edit Attendance";
 }
 
-<h3>Attendance for Lecture on @ViewBag.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")</h3>
+<div class="container my-5">
+    <div class="card" style="border-radius: 12px; padding: 25px; background-color: #F1EFEC; box-shadow: 0 0 15px rgba(0,0,0,0.05);">
+        <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">
+            Attendance for Lecture on @ViewBag.Lecture.LectureDateTime.ToString("yyyy-MM-dd hh:mm tt")
+        </h3>
 
-<form method="post" asp-action="SaveAttendance">
-    <input type="hidden" name="lectureId" value="@ViewBag.Lecture.LectureID">
+        <form method="post" asp-action="SaveAttendance" class="mt-4">
+            <input type="hidden" name="lectureId" value="@ViewBag.Lecture.LectureID" />
 
-    <table class="table table-bordered mt-3">
-        <thead class="table-primary">
-            <tr>
-                <th>Student Name</th>
-                <th>Present</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in Model)
-            {
-                <tr>
-                    <td>@student.FullName</td>
-                    <td>
-                        <input type="checkbox" name="presentStudents" value="@student.StudentID" @(student.IsPresent ? "checked" : "")>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            <table class="table table-bordered" style="background-color: #f8f7f6;">
+                <thead style="background-color: #123458; color: #f8f7f6; font-family: Funnel Display;">
+                    <tr>
+                        <th style="font-family: Funnel Display;">Student Name</th>
+                        <th style="font-family: Funnel Display;">Present</th>
+                    </tr>
+                </thead>
+                <tbody style="font-family: Funnel Display; color: #123458;">
+                    @foreach (var student in Model)
+                    {
+                        <tr>
+                            <td>@student.FullName</td>
+                            <td>
+                                <input type="checkbox"
+                                       name="presentStudents"
+                                       value="@student.StudentID"
+                                       @(student.IsPresent ? "checked" : "") />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-    <button type="submit" class="btn btn-primary">Save Attendance</button>
-</form>
+            <button type="submit"
+                    class="btn btn-primary mt-3"
+                    style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">
+                Save Attendance
+            </button>
+        </form>
+    </div>
+</div>

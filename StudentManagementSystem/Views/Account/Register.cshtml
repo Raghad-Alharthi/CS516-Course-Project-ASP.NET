@@ -4,8 +4,8 @@
 }
 
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <div class="card shadow p-4" style="width: 400px;">
-        <h3 class="text-center text-primary">Sign Up</h3>
+    <div class="card shadow p-4" style="width: 400px; border-radius: 12px;">
+        <h3 class="text-center" style="font-family: Funnel Display; color: #123458; font-weight: 700;">Sign Up</h3>
 
         @if (ViewBag.ErrorMessage != null)
         {
@@ -14,32 +14,32 @@
 
         <form method="post" action="/Account/Register">
             <div class="mb-3">
-                <label class="form-label">First Name</label>
-                <input type="text" name="firstName" class="form-control" placeholder="Enter your first name" required>
+                <label class="form-label" style="font-family: Funnel Display; color: #123458; font-weight: 400;">First Name</label>
+                <input type="text" style="font-family: Funnel Display;font-weight: 200;" name="firstName" class="form-control" placeholder="Enter your first name" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Last Name</label>
-                <input type="text" name="lastName" class="form-control" placeholder="Enter your last name" required>
+                <label class="form-label" style="font-family: Funnel Display; color: #123458; font-weight: 400;">Last Name</label>
+                <input type="text" style="font-family: Funnel Display;font-weight: 200;" name="lastName" class="form-control" placeholder="Enter your last name" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+                <label class="form-label" style="font-family: Funnel Display; color: #123458; font-weight: 400;">Username</label>
+                <input type="text" style="font-family: Funnel Display;font-weight: 200;" name="username" class="form-control" placeholder="Create a username" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" placeholder="Create a password" required>
+                <label class="form-label" style="font-family: Funnel Display; color: #123458; font-weight: 400;">Password</label>
+                <input type="password" style="font-family: Funnel Display;font-weight: 200;" name="password" class="form-control" placeholder="Create a password" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Role</label>
-                <select name="role" class="form-control" required>
-                    <option value="Student">Student</option>
-                    <option value="Teacher">Teacher</option>
+                <label class="form-label" style="font-family: Funnel Display; color: #123458; font-weight: 400;">Role</label>
+                <select name="role" class="form-control" style="font-family: Funnel Display;font-weight: 200;" required>
+                    <option value="Student" style="font-family: Funnel Display;font-weight: 200;">Student</option>
+                    <option value="Teacher" style="font-family: Funnel Display;font-weight: 200;">Teacher</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+            <button type="submit" class="btn w-100" style="background-color: #123458; color: white; font-family: Funnel Display; border-radius: 6px;">Sign Up</button>
         </form>
 
-        <p class="text-center mt-3">
+        <p class="text-center mt-3" style="font-family: Funnel Display; color: #123458;">
             Already have an account? <a href="/Account/Login">Login here</a>
         </p>
     </div>

@@ -86,7 +86,9 @@ public class TeacherController : Controller
         {
             StudentID = student.UserID,
             FullName = $"{student.FirstName} {student.LastName}",
-            IsPresent = attendanceRecords.Any(a => a.StudentID == student.UserID && a.IsPresent)
+            IsPresent = !attendanceRecords.Any(a => a.StudentID == student.UserID)
+           || attendanceRecords.Any(a => a.StudentID == student.UserID && a.IsPresent)
+
         }).ToList();
 
         ViewBag.Lecture = lecture;
@@ -96,60 +98,105 @@ public class TeacherController : Controller
     [HttpPost]
     public async Task<IActionResult> SaveAttendance(int lectureId, List<int> presentStudents)
     {
-        var lecture = await _context.Lectures.Include(l => l.Class).FirstOrDefaultAsync(l => l.LectureID == lectureId);
-        if (lecture == null) return NotFound();
+        var lecture = await _context.Lectures
+            .Include(l => l.Class)
+            .FirstOrDefaultAsync(l => l.LectureID == lectureId);
+
+        if (lecture == null)
+            return NotFound();
 
         var students = await _context.StudentClasses
             .Where(sc => sc.ClassID == lecture.ClassID)
+            .Include(sc => sc.Student)
             .Select(sc => sc.Student)
+            .Where(s => s != null)
             .ToListAsync();
 
         foreach (var student in students)
         {
-            var attendanceRecord = await _context.Attendances
+            if (student == null || student.UserID == 0)
+                continue;
+
+            var attendance = await _context.Attendances
                 .FirstOrDefaultAsync(a => a.LectureID == lectureId && a.StudentID == student.UserID);
 
-            if (attendanceRecord == null)
+            bool isNowPresent = presentStudents?.Contains(student.UserID) ?? false;
+
+            if (attendance != null)
             {
-                attendanceRecord = new Attendance
+                if (isNowPresent)
                 {
-                    StudentID = student.UserID,
-                    LectureID = lectureId,
-                    IsPresent = presentStudents.Contains(student.UserID)
-                };
-                _context.Attendances.Add(attendanceRecord);
+                    // Student was previously marked absent but is now present — remove record
+                    _context.Attendances.Remove(attendance);
+                    if (!string.IsNullOrEmpty(attendance.SickLeaveFile))
+                    {
+                        var path = Path.Combine("wwwroot", attendance.SickLeaveFile.TrimStart('/'));
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+                    }
+                }
+                else
+                {
+                    attendance.IsPresent = false; // still absent
+                }
             }
             else
             {
-                attendanceRecord.IsPresent = presentStudents.Contains(student.UserID);
+                // Create new attendance record only if absent
+                if (!isNowPresent)
+                {
+                    attendance = new Attendance
+                    {
+                        StudentID = student.UserID,
+                        LectureID = lectureId,
+                        IsPresent = false
+                    };
+                    _context.Attendances.Add(attendance);
+                }
             }
         }
 
         await _context.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Attendance has been successfully updated.";
         return RedirectToAction("ManageClass", new { ClassID = lecture.ClassID });
     }
 
+
     // View sick leave requests
-    public async Task<IActionResult> SickLeaveRequests()
+    public async Task<IActionResult> SickLeaveRequests(int lectureId)
     {
-        var pendingRequests = await _context.Attendances
-            .Where(a => a.SickLeaveStatus == "Pending")
+        var requests = await _context.Attendances
             .Include(a => a.Student)
             .Include(a => a.Lecture)
+            .Where(a => a.LectureID == lectureId && !string.IsNullOrEmpty(a.SickLeaveFile))
             .ToListAsync();
 
-        return View(pendingRequests);
+        ViewBag.LectureId = lectureId;
+        return View(requests);
     }
 
+
+
     [HttpPost]
-    public async Task<IActionResult> ApproveSickLeave(int attendanceId, string decision)
+    public async Task<IActionResult> ApproveSickLeave(int attendanceId, string decision, string? comment)
     {
         var attendance = await _context.Attendances.FindAsync(attendanceId);
         if (attendance == null) return NotFound();
 
-        attendance.SickLeaveStatus = decision; // Accept or Reject
-        await _context.SaveChangesAsync();
+        attendance.SickLeaveStatus = decision;
+        if (decision == "Rejected" && !string.IsNullOrWhiteSpace(comment))
+        {
+            attendance.SickLeaveComment = comment;
+        }
+        else if (decision == "Accepted")
+        {
+            attendance.SickLeaveComment = null;
+        }
 
-        return RedirectToAction("SickLeaveRequests");
+        await _context.SaveChangesAsync();
+        return RedirectToAction("SickLeaveRequests", new { lectureId = attendance.LectureID });
     }
+
+
 }
