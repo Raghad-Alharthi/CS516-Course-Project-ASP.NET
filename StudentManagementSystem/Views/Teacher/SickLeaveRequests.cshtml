@@ -53,7 +53,7 @@
                             {
                                 <form asp-action="ApproveSickLeave" method="post" class="d-flex gap-2">
                                     <input type="hidden" name="attendanceId" value="@request.AttendanceID" />
-                                    <textarea name="comment" class="form-control mb-2" placeholder="Rejection comment (optional)" style="font-family: Funnel Display;" rows="2"></textarea>
+                                    <textarea name="comment" class="form-control mb-2" placeholder="Rejection comment (required if rejected)" style="font-family: Funnel Display;" rows="2"></textarea>
                                     <div class="d-flex gap-2">
                                         <button name="decision" value="Accepted"
                                                 class="btn btn-success btn-sm"
@@ -67,6 +67,12 @@
                                         </button>
                                     </div>
                                 </form>
+                            }
+                            else if (request.SickLeaveStatus == "Rejected" && !string.IsNullOrEmpty(request.SickLeaveComment))
+                            {
+                                <div style="font-family: Funnel Display; background-color: #ffeeba; padding: 10px; border-radius: 8px;">
+                                    <strong>Rejection Reason:</strong> @request.SickLeaveComment
+                                </div>
                             }
                             else
                             {

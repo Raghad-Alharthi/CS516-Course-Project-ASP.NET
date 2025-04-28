@@ -253,6 +253,18 @@
       "PackagePath": "staticwebassets\\sick_leaves\\lab 1.pdf"
     },
     {
+      "Id": "C:\\Users\\rag37\\OneDrive\\Desktop\\GitHub\\CS516-ASP.net\\StudentManagementSystem\\wwwroot\\sick_leaves\\lab 10.pdf",
+      "PackagePath": "staticwebassets\\sick_leaves\\lab 10.pdf"
+    },
+    {
+      "Id": "C:\\Users\\rag37\\OneDrive\\Desktop\\GitHub\\CS516-ASP.net\\StudentManagementSystem\\wwwroot\\sick_leaves\\lab 2.pdf",
+      "PackagePath": "staticwebassets\\sick_leaves\\lab 2.pdf"
+    },
+    {
+      "Id": "C:\\Users\\rag37\\OneDrive\\Desktop\\GitHub\\CS516-ASP.net\\StudentManagementSystem\\wwwroot\\sick_leaves\\lab 4.pdf",
+      "PackagePath": "staticwebassets\\sick_leaves\\lab 4.pdf"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.StudentManagementSystem.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

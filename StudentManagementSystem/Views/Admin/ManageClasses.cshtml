@@ -167,37 +167,4 @@
         </div>
     }
 
-    @* <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
-        <h4 style="font-family: Funnel Display; color: #123458;">Edit Class</h4>
-
-        <form asp-action="EditClass" method="post">
-            <input type="hidden" name="ClassID" value="@classItem.ClassID" />
-
-            <div class="mb-3">
-                <label class="form-label" style="font-family: Funnel Display; color: #123458;">Class Name</label>
-                <input type="text" name="ClassName"
-                    value="@classItem.ClassName"
-                    class="form-control"
-                    style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" required />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" style="font-family: Funnel Display; color: #123458;">Assign Teacher</label>
-                <select name="TeacherID" class="form-select me-2" style="font-family: Funnel Display;">
-                    <option value="">-- Unassigned --</option>
-                    @foreach (var teacher in ViewBag.Teachers)
-                    {
-                        <option value="@teacher.UserID" @(teacher.UserID == classItem.TeacherID ? "selected" : "")>
-                            @teacher.FirstName @teacher.LastName
-                        </option>
-                    }
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">
-                Save Changes
-            </button>
-        </form>
-    </div> *@
-
 </div>
