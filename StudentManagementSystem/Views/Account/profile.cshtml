@@ -1,0 +1,19 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "My Profile";
+}
+@using System.Security.Claims
+
+<div class="container my-5">
+    <div class="card p-4" style="background-color: #F1EFEC; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.05);">
+        <h3 style="font-family: Funnel Display; color: #123458;">My Profile</h3>
+        <hr />
+
+        <p style="font-family: Funnel Display; color: #123458;"><strong>First Name:</strong> @User.FindFirst("FirstName")?.Value</p>
+        <p style="font-family: Funnel Display; color: #123458;"><strong>Last Name:</strong> @User.FindFirst("LastName")?.Value</p>
+        <p style="font-family: Funnel Display; color: #123458;"><strong>Username:</strong> @User.Identity?.Name</p>
+        <p style="font-family: Funnel Display; color: #123458;"><strong>Role:</strong> @User.FindFirst(ClaimTypes.Role)?.Value</p>
+
+        <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-warning mt-3" style="background-color: #123458; border-color: #123458; font-family: Funnel Display; color:#F1EFEC">Change Password</a>
+    </div>
+</div>

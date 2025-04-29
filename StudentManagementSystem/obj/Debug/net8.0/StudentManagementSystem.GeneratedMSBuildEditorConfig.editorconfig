@@ -26,8 +26,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\rag37\OneDrive\Desktop\GitHub\CS516-ASP.net\StudentManagementSystem
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/rag37/OneDrive/Desktop/GitHub/CS516-ASP.net/StudentManagementSystem/Views/Account/ChangePassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/rag37/OneDrive/Desktop/GitHub/CS516-ASP.net/StudentManagementSystem/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rag37/OneDrive/Desktop/GitHub/CS516-ASP.net/StudentManagementSystem/Views/Account/profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxwcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/rag37/OneDrive/Desktop/GitHub/CS516-ASP.net/StudentManagementSystem/Views/Account/Register.cshtml]
