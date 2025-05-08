@@ -34,39 +34,75 @@ public class AdminController : Controller
         var classes = await _context.Classes.Include(c => c.Teacher).ToListAsync();
         var teachers = await _context.Users.Where(u => u.Role == "Teacher").ToListAsync();
 
-        ViewBag.Classes = classes; // Needed for dropdowns or display
-        ViewBag.Teachers = teachers;
+        var firstLectures = _context.Lectures
+            .GroupBy(l => l.ClassID)
+            .Select(g => new { ClassID = g.Key, FirstLecture = g.Min(l => l.LectureDateTime) })
+            .ToDictionary(g => g.ClassID, g => (DateTime?)g.FirstLecture);
 
         var vm = new ManageClassesViewModel
         {
             Classes = classes,
-            ClassToEdit = editId.HasValue
-                ? await _context.Classes.Include(c => c.Teacher).FirstOrDefaultAsync(c => c.ClassID == editId)
-                : null
+            ClassToEdit = editId.HasValue ? await _context.Classes.Include(c => c.Teacher).FirstOrDefaultAsync(c => c.ClassID == editId) : null,
+            FirstLecturesByClassId = firstLectures
         };
 
+        ViewBag.Teachers = teachers;
+        ViewBag.Classes = classes;
         return View(vm);
     }
+
 
 
     [HttpPost]
     public async Task<IActionResult> AddClassWithSchedule(string className, int TeacherID, string selectedDay, string selectedTime)
     {
-        // 🔹 Create a new class and save it first
         var newClass = new Class
         {
             ClassName = className,
-            TeacherID = TeacherID // Ensure consistency with your Class model
+            TeacherID = TeacherID
         };
 
-        _context.Classes.Add(newClass);
-        await _context.SaveChangesAsync(); // 🔹 Save the class first to get ClassID
-
-        // 🔹 Generate lectures after class is created
-        int weeksInSemester = 15;
         DayOfWeek targetDay = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), selectedDay);
         TimeSpan lectureTime = TimeSpan.ParseExact(selectedTime, "hh\\:mm", CultureInfo.InvariantCulture);
 
+        // Validate day
+        if (targetDay == DayOfWeek.Friday || targetDay == DayOfWeek.Saturday)
+        {
+            TempData["Error"] = "Only Sunday to Thursday are allowed.";
+            return RedirectToAction("ManageClasses");
+        }
+
+        // Validate time
+        if (lectureTime < TimeSpan.FromHours(8) || lectureTime >= TimeSpan.FromHours(19))
+        {
+            TempData["Error"] = "Lecture must be between 08:00 and 19:00.";
+            return RedirectToAction("ManageClasses");
+        }
+
+        // ✅ FIX: First fetch teacher lectures from DB (basic filter only)
+        var possibleLectures = await _context.Lectures
+            .Include(l => l.Class)
+            .Where(l => l.Class.TeacherID == TeacherID)
+            .ToListAsync();
+
+        // ✅ Now apply the time overlap check in memory
+        bool conflict = possibleLectures.Any(l =>
+            l.LectureDateTime.DayOfWeek == targetDay &&
+            Math.Abs((l.LectureDateTime.TimeOfDay - lectureTime).TotalMinutes) < 120
+        );
+
+        if (conflict)
+        {
+            TempData["Error"] = "Teacher already has a lecture at or overlapping with that time.";
+            return RedirectToAction("ManageClasses");
+        }
+
+        // Save new class
+        _context.Classes.Add(newClass);
+        await _context.SaveChangesAsync();
+
+        // Generate lectures
+        int weeksInSemester = 15;
         List<Lecture> lectures = new List<Lecture>();
         DateTime startDate = DateTime.Today;
 
@@ -79,7 +115,7 @@ public class AdminController : Controller
         {
             lectures.Add(new Lecture
             {
-                ClassID = newClass.ClassID, // Now ClassID exists
+                ClassID = newClass.ClassID,
                 LectureDateTime = startDate.Date.Add(lectureTime)
             });
 
@@ -89,6 +125,7 @@ public class AdminController : Controller
         _context.Lectures.AddRange(lectures);
         await _context.SaveChangesAsync();
 
+        TempData["Message"] = "Class and lectures created successfully.";
         return RedirectToAction("ManageClasses");
     }
 
@@ -129,6 +166,31 @@ public class AdminController : Controller
     {
         var classItem = await _context.Classes.FindAsync(ClassID);
         if (classItem == null) return NotFound();
+
+        //check conflict
+        var classLectures = await _context.Lectures
+            .Where(l => l.ClassID == ClassID)
+            .ToListAsync();
+
+        var otherLectures = await _context.Lectures
+            .Include(l => l.Class)
+            .Where(l => l.Class.TeacherID == TeacherID && l.ClassID != ClassID)
+            .ToListAsync(); // 🔁 pull data into memory
+
+        foreach (var lecture in classLectures)
+        {
+            var overlap = otherLectures.Any(l =>
+                l.LectureDateTime.DayOfWeek == lecture.LectureDateTime.DayOfWeek &&
+                Math.Abs((l.LectureDateTime - lecture.LectureDateTime).TotalMinutes) < 120);
+
+            if (overlap)
+            {
+                TempData["Error"] = "Teacher is not available for one or more scheduled lecture times.";
+                return RedirectToAction("ManageClasses", new { editId = ClassID });
+            }
+        }
+
+
 
         classItem.TeacherID = TeacherID;
 

@@ -3,5 +3,6 @@ namespace StudentManagementSystem.Models.ViewModels{
     {
         public List<Class> Classes { get; set; }
         public Class ClassToEdit { get; set; }
+        public Dictionary<int, DateTime?> FirstLecturesByClassId { get; set; } = new();
     }
 }

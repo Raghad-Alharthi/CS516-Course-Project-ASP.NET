@@ -8,10 +8,15 @@
     <!-- Page Title -->
     <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">Manage Classes</h3>
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
     @if (TempData["Message"] != null)
     {
         <div class="alert alert-success">@TempData["Message"]</div>
     }
+
 
     <!-- Classes Table -->
     <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
@@ -19,6 +24,7 @@
             <thead style="background-color: #123458; color: white;">
                 <tr>
                     <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Class Name</th>
+                    <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Scheduled Lecture</th>
                     <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Teacher</th>
                     <th style="font-family: Funnel Display; background-color: #123458; color: #f8f7f6;">Actions</th>
                 </tr>
@@ -30,29 +36,25 @@
                     {
                         <tr>
                             <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">@classItem.ClassName</td>
-                            <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">@(classItem.Teacher?.FirstName ?? "Unassigned")
-                                @if (classItem.Teacher == null)
-                                {
-                                    <form asp-action="AssignTeacherToClass" method="post" style="display:inline;">
-                                        <input type="hidden" name="ClassID" value="@classItem.ClassID" />
-
-                                        <select name="TeacherID" class="form-select d-inline w-auto me-2" style="font-family: Funnel Display;">
-                                            <option disabled selected value="">-- Select a Teacher --</option>
-                                            @foreach (var teacher in ViewBag.Teachers)
-                                            {
-                                                <option value="@teacher.UserID">@teacher.FirstName @teacher.LastName</option>
-                                            }
-                                        </select>
-
-                                        <button type="submit" class="btn btn-primary btn-sm"
-                                                style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">
-                                            Assign
-                                        </button>
-                                    </form>
+                            <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">
+                                @{
+                                    if (Model.FirstLecturesByClassId.TryGetValue(classItem.ClassID, out var firstLecture) && firstLecture != null)
+                                    {
+                                        @firstLecture.Value.ToString("dddd - h:mm tt")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No lectures</span>
+                                    }
                                 }
-
                             </td>
+                            <td style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">@(classItem.Teacher?.FirstName ?? "Unassigned")</td>
                             <td  style="background-color: #f8f7f6; font-family: Funnel Display;">
+                                <a href="@Url.Action("ManageClasses", new { editId = classItem.ClassID })"
+                                    class="btn btn-secondary btn-sm me-2"
+                                    style="font-family: Funnel Display;">
+                                        Edit
+                                </a>
                                 <form asp-action="DeleteClass" method="post" style="display: inline;">
                                     <input type="hidden" name="ClassID" value="@classItem.ClassID">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeletion(this);">Delete</button>
@@ -109,62 +111,47 @@
         </form>
     </div>
 
-    <!-- Select a class to edit -->
-    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
-        <h4 style="font-family: Funnel Display; color: #123458;">Select Class to Edit</h4>
-
-        <form method="get" asp-action="ManageClasses">
-            <div class="d-flex align-items-center mb-3">
-                <select name="editId" class="form-select me-2" required style="font-family: Funnel Display;">
-                    <option value="">-- Choose a Class --</option>
-                    @if (ViewBag.Classes != null)
-                    {
-                        @foreach (var c in ViewBag.Classes)
-                        {
-                            <option value="@c.ClassID">@c.ClassName</option>
-                        }
-                    }
-                </select>
-                <button type="submit" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458; width: 20em;">
-                    Load Class
-                </button>
-            </div>
-        </form>
-    </div>
-
     <!-- Edit Class Section -->
     @if (Model.ClassToEdit != null)
-    {
-        var classItem = Model.ClassToEdit;
-        <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
-            <h4 style="font-family: Funnel Display; color: #123458;">Edit Class</h4>
+{
+    var classItem = Model.ClassToEdit;
+    <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
+        <h4 style="font-family: Funnel Display; color: #123458;">Edit Class: @classItem.ClassName</h4>
 
-            <form asp-action="EditClass" method="post">
-                <input type="hidden" name="ClassID" value="@classItem.ClassID" />
+        <form asp-action="EditClass" method="post">
+            <input type="hidden" name="ClassID" value="@classItem.ClassID" />
 
-                <div class="mb-3">
-                    <label class="form-label" style="font-family: Funnel Display; color: #123458;">Reassign Teacher</label>
-                    <select name="TeacherID" class="form-select me-2" style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;" >
-                        <option value="">-- Unassigned --</option>
-                        @foreach (var teacher in ViewBag.Teachers)
-                        {
-                            @if(teacher.UserID == classItem.TeacherID){
-                                <option value="@teacher.UserID" selected>
-                                    @teacher.FirstName @teacher.LastName
-                                </option>
-                            }
+            <div class="mb-3">
+                <label class="form-label" style="font-family: Funnel Display; color: #123458;">Reassign Teacher</label>
+                <select name="TeacherID" class="form-select me-2" style="background-color: #f8f7f6; font-family: Funnel Display; color: #123458;">
+                    <option value="">-- Unassigned --</option>
+                    @foreach (var teacher in ViewBag.Teachers)
+                    {
+                        string selected = teacher.UserID == classItem.TeacherID ? "selected" : "";
+
+                        <text>
+                            @if (teacher.UserID == classItem.TeacherID){
+                                    <option value="@teacher.UserID" selected>
+                                        @teacher.FirstName @teacher.LastName
+                                    </option> 
+                                }
                             else{
                                 <option value="@teacher.UserID">
                                     @teacher.FirstName @teacher.LastName
                                 </option>
                             }
-                        }
-                    </select>
-                </div>
+                        </text>
+                    }
+                </select>
+            </div>
 
-                <button type="submit" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">Save Changes</button>
-            </form>
-        </div>
-    }
+
+            <button type="submit" class="btn btn-primary" style="font-family: Funnel Display; background-color: #123458; border-color: #123458;">
+                Save Changes
+            </button>
+        </form>
+    </div>
+}
+
 
 </div>
