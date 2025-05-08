@@ -177,24 +177,24 @@ public class TeacherController : Controller
     }
 
 
-
     [HttpPost]
     public async Task<IActionResult> ApproveSickLeave(int attendanceId, string decision, string? comment)
     {
         var attendance = await _context.Attendances.FindAsync(attendanceId);
         if (attendance == null) return NotFound();
 
-        attendance.SickLeaveStatus = decision;
-        if (decision == "Rejected" && !string.IsNullOrWhiteSpace(comment))
+        if (decision == "Rejected" && string.IsNullOrWhiteSpace(comment))
         {
-            attendance.SickLeaveComment = comment;
-        }
-        else if (decision == "Accepted")
-        {
-            attendance.SickLeaveComment = null;
+            TempData["Error"] = "You must provide a rejection comment.";
+            return RedirectToAction("SickLeaveRequests", new { lectureId = attendance.LectureID });
         }
 
+        attendance.SickLeaveStatus = decision;
+        attendance.SickLeaveComment = decision == "Rejected" ? comment : null;
+
         await _context.SaveChangesAsync();
+        TempData["Message"] = $"Sick leave request {decision.ToLower()}.";
+
         return RedirectToAction("SickLeaveRequests", new { lectureId = attendance.LectureID });
     }
 

@@ -9,6 +9,15 @@
             Sick Leave Requests
         </h3>
 
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+        }
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success mt-3">@TempData["Message"]</div>
+        }
+
         <table class="table table-bordered mt-4" style="background-color: #f8f7f6;">
             <thead style="background-color: #123458; color: #f8f7f6;">
                 <tr>
@@ -85,3 +94,17 @@
         </table>
     </div>
 </div>
+
+<script>
+document.querySelectorAll('form[action*="ApproveSickLeave"]').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        const decision = e.submitter?.value;
+        const comment = form.querySelector('textarea[name="comment"]').value.trim();
+
+        if (decision === "Rejected" && comment === "") {
+            e.preventDefault();
+            alert("Please enter a comment for rejection.");
+        }
+    });
+});
+</script>

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Te7IbMilKxGnU+KnuyFQ8xKHyjjgTKgOnvYgPflC8Es=",
+  "Hash": "IduwymINn5pf/VA0MYItXBG4E9U6l8KiNajFHNjmPXI=",
   "Source": "StudentManagementSystem",
   "BasePath": "_content/StudentManagementSystem",
   "Mode": "Default",
@@ -1269,6 +1269,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\sick_leaves\\lab 4.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\rag37\\OneDrive\\Desktop\\GitHub\\CS516-ASP.net\\StudentManagementSystem\\wwwroot\\sick_leaves\\lab_3.docx",
+      "SourceId": "StudentManagementSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rag37\\OneDrive\\Desktop\\GitHub\\CS516-ASP.net\\StudentManagementSystem\\wwwroot\\",
+      "BasePath": "_content/StudentManagementSystem",
+      "RelativePath": "sick_leaves/lab_3.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\sick_leaves\\lab_3.docx"
     },
     {
       "Identity": "C:\\Users\\rag37\\OneDrive\\Desktop\\GitHub\\CS516-ASP.net\\StudentManagementSystem\\wwwroot\\sick_leaves\\Project DataMining - LAST.pdf",
