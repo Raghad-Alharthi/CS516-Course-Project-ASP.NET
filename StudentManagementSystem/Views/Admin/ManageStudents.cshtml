@@ -9,12 +9,13 @@
     <!-- Page Title -->
     <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">Manage Students and Class Assignments</h3>
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
     @if (TempData["Message"] != null)
     {
-        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="font-family: Funnel Display;">
-            @TempData["Message"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <div class="alert alert-success">@TempData["Message"]</div>
     }
 
     <!-- Students Table -->

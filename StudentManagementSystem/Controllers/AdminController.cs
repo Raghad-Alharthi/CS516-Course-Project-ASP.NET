@@ -156,6 +156,7 @@ public class AdminController : Controller
             // Finally, remove the class
             _context.Classes.Remove(classToDelete);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Class deleted successfully.";
         }
 
         return RedirectToAction("ManageClasses");
@@ -237,7 +238,7 @@ public class AdminController : Controller
 
         if (alreadyAssigned)
         {
-            TempData["Message"] = "Student is already assigned to this class.";
+            TempData["Error"] = "Student is already assigned to this class.";
             return RedirectToAction("ManageStudents");
         }
 
@@ -249,7 +250,7 @@ public class AdminController : Controller
 
         _context.StudentClasses.Add(studentClass);
         await _context.SaveChangesAsync();
-
+        TempData["Message"] = "Student assigned successfully.";
         return RedirectToAction("ManageStudents");
     }
 
@@ -257,6 +258,13 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> AddStudent(string firstName, string lastName, string username, string password)
     {
+        // Check if username already exists
+        if (_context.Users.Any(u => u.Username == username))
+        {
+            TempData["Error"] = "Username is already taken. Please choose another one.";
+            return RedirectToAction("ManageStudents");
+        }
+
         var newStudent = new User
         {
             FirstName = firstName,
@@ -268,8 +276,11 @@ public class AdminController : Controller
 
         _context.Users.Add(newStudent);
         await _context.SaveChangesAsync();
+
+        TempData["Message"] = "Student added successfully.";
         return RedirectToAction("ManageStudents");
     }
+
 
     [HttpPost]
     public async Task<IActionResult> DeleteStudent(int id)
@@ -305,6 +316,12 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> AddTeacher(string firstName, string lastName, string username, string password)
     {
+        if (_context.Users.Any(u => u.Username == username))
+        {
+            TempData["Error"] = "Username is already taken. Please choose another one.";
+            return RedirectToAction("ManageTeachers");
+        }
+    
         var newTeacher = new User
         {
             FirstName = firstName,
@@ -316,6 +333,7 @@ public class AdminController : Controller
 
         _context.Users.Add(newTeacher);
         await _context.SaveChangesAsync();
+        TempData["Message"] = "Teacher added successfully.";
         return RedirectToAction("ManageTeachers");
     }
 
@@ -345,7 +363,7 @@ public class AdminController : Controller
         // Step 4: Now it's safe to delete the teacher
         _context.Users.Remove(teacher);
         await _context.SaveChangesAsync();
-
+        TempData["Message"] = "Teacher deleted successfully.";
         return RedirectToAction("ManageTeachers");
     }
 

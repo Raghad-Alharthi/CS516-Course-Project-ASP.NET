@@ -6,6 +6,15 @@
 <div class="container my-5">
     <!-- Page Title -->
     <h3 style="font-family: Funnel Display; color: #123458; font-weight: 800;">Manage Teachers</h3>
+    
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
 
     <!-- Teachers Table -->
     <div class="card mb-4" style="border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); background-color: #F1EFEC;">
